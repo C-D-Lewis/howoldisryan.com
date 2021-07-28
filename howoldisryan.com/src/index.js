@@ -117,7 +117,7 @@ const calculateAgeString = () => {
     seconds,
   } = datetimeDifference(BIRTH_DATE, now);
   return DOM.isMobile()
-    ? `${years} years, ${months} months,<br/>${days - 1} days, ${hours} hours,<br/>${minutes} minutes,${seconds} seconds`
+    ? `${years} years, ${months} months,<br/>${days - 1} days, ${hours} hours,<br/>${minutes} minutes, ${seconds} seconds`
     : `${years} years, ${months} months, ${days - 1} days,<br/>${hours} hours, ${minutes} minutes, ${seconds} seconds`;
 };
 
