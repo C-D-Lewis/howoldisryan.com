@@ -1,0 +1,17 @@
+* {
+  font-family: 'Gowun Batang', serif;
+}
+
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100vh;
+}
+
+#app {
+  height: 100vh;
+}
+
+div {
+  white-space: pre-wrap;
+}
