@@ -86,8 +86,8 @@ const calculateAgeString = () => {
     days,
   } = datetimeDifference(BIRTH_DATE, now);
   return DOM.isMobile()
-    ? `${years} years,<br/>${months} months,<br/>${days} days`
-    : `${years} years, ${months} months, ${days} days`;
+    ? `${years} years,<br/>${months} months,<br/>${days - 1} days`
+    : `${years} years, ${months} months, ${days - 1} days`;
 };
 
 /**
