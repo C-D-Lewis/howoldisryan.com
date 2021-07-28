@@ -61,7 +61,7 @@ const ImageView = ({ src }) => DOM.create('img', {
  * @returns {HTMLElement}
  */
 const GitHubLink = () => DOM.create('a', {
-  color: 'darkgrey',
+  color: '#555',
   display: 'flex',
   justifyContent: 'center',
   position: 'fixed',
