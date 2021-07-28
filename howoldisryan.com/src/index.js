@@ -56,6 +56,24 @@ const ImageView = ({ src }) => DOM.create('img', {
 });
 
 /**
+ * Source on GitHub link.
+ *
+ * @returns {HTMLElement}
+ */
+const GitHubLink = () => DOM.create('a', {
+  color: 'darkgrey',
+  display: 'flex',
+  justifyContent: 'center',
+  position: 'fixed',
+  bottom: '20px',
+  left: 0,
+  right: 0,
+}, {
+  target: '_blank',
+  href: 'https://github.com/C-D-Lewis/howoldisryan.com',
+}, ['Source available on GitHub']);
+
+/**
  * Calculate the age string.
  *
  * @returns {string}
@@ -82,6 +100,8 @@ const setupUI = () => {
   
   UI.ageView = AgeView();
   DOM.addChild(container, UI.ageView);
+
+  DOM.addChild(container, GitHubLink());
 
   // Finally
   DOM.addChild(UI.root, container);
