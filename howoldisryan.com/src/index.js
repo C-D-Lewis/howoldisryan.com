@@ -4,12 +4,16 @@ const datetimeDifference = require('datetime-difference');
 const INTERVAL_MS = 1000;
 /** Original birth date */
 const BIRTH_DATE = new Date('1991-07-29');
+/** Time button stays pressed */
+const BUTTON_POP_MS = 10200;
 
 /** Tracked UI components. */
 const UI = {
   root: document.getElementById('app'),
   ageView: undefined,
 };
+
+const soundbyte = new Audio('./assets/operator.mp3');
 
 /**
  * Container component.
@@ -50,28 +54,25 @@ const ImageView = ({ src }) => {
   const img = DOM.create('img', {
     maxWidth: '256px',
     maxHeight: '256px',
-    borderRadius: '50px',
+    borderRadius: '140px',
     margin: '0px auto 20px auto',
-    transition: '0.1s',
+    transition: '0.2s',
   }, {
     src,
   });
 
-  // img.addEventListener('click', () => {
-  //   // Set
-  //   img.style.marginTop = '5px';
-  //   img.style.maxWidth = '246px';
-  //   img.style.maxHeight = '246px';
-  //   img.style.marginBottom = '25px';
+  img.addEventListener('click', () => {
+    // Set
+    img.style.border = 'solid 8px lightgreen';
 
-  //   // Reset
-  //   setTimeout(() => {
-  //     img.style.marginTop = '0px';
-  //     img.style.maxWidth = '256px';
-  //     img.style.maxHeight = '256px';
-  //     img.style.marginBottom = '20px';
-  //   }, BUTTON_POP_MS);
-  // });
+    // Reset
+    setTimeout(() => {
+      img.style.border = 'none';
+    }, BUTTON_POP_MS);
+
+    // Trigger sound
+    soundbyte.play();
+  });
 
   return img;
 };
