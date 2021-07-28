@@ -37,7 +37,7 @@ const AgeView = () => DOM.create('div', {
   justifyContent: 'center',
   textAlign: 'center',
   color: 'white',
-  fontSize: '3rem',
+  fontSize: DOM.isMobile() ? '2rem' : '3rem',
 });
 
 /**
@@ -46,13 +46,41 @@ const AgeView = () => DOM.create('div', {
  * @param {object} props - Component props. 
  * @returns {HTMLElement}
  */
-const ImageView = ({ src }) => DOM.create('img', {
-  maxWidth: '256px',
-  maxHeight: '256px',
-  borderRadius: '50px',
-  margin: '0px auto 20px auto',
+const ImageView = ({ src }) => {
+  const img = DOM.create('img', {
+    maxWidth: '256px',
+    maxHeight: '256px',
+    borderRadius: '50px',
+    margin: '0px auto 20px auto',
+    transition: '0.1s',
+  }, {
+    src,
+  });
+
+  // img.addEventListener('click', () => {
+  //   // Set
+  //   img.style.marginTop = '5px';
+  //   img.style.maxWidth = '246px';
+  //   img.style.maxHeight = '246px';
+  //   img.style.marginBottom = '25px';
+
+  //   // Reset
+  //   setTimeout(() => {
+  //     img.style.marginTop = '0px';
+  //     img.style.maxWidth = '256px';
+  //     img.style.maxHeight = '256px';
+  //     img.style.marginBottom = '20px';
+  //   }, BUTTON_POP_MS);
+  // });
+
+  return img;
+};
+
+const Hourglass = () => DOM.create('img', {
+  maxWidth: '64px',
+  maxHeight: '64px',
 }, {
-  src,
+  src: './assets/hourglass.png',
 });
 
 /**
@@ -84,10 +112,13 @@ const calculateAgeString = () => {
     years,
     months,
     days,
+    hours,
+    minutes,
+    seconds,
   } = datetimeDifference(BIRTH_DATE, now);
   return DOM.isMobile()
-    ? `${years} years,<br/>${months} months,<br/>${days - 1} days`
-    : `${years} years, ${months} months, ${days - 1} days`;
+    ? `${years} years, ${months} months,<br/>${days - 1} days, ${hours} hours,<br/>${minutes} minutes,${seconds} seconds`
+    : `${years} years, ${months} months, ${days - 1} days,<br/>${hours} hours, ${minutes} minutes, ${seconds} seconds`;
 };
 
 /**

@@ -5,11 +5,12 @@
 html, body {
   margin: 0;
   padding: 0;
-  height: 100vh;
+  height: 90vh;
+  background-color: black;
 }
 
 #app {
-  height: 100vh;
+  height: 90vh;
 }
 
 div {
