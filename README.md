@@ -2,6 +2,16 @@
 
 He may be older than you think.
 
+## Play the scroller greeting
+
+```shell
+cd scroller
+
+npm ci
+
+node index.js
+```
+
 ## Build the site
 
 ```shell

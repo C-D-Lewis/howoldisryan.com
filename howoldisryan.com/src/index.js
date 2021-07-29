@@ -10,6 +10,7 @@ const BUTTON_POP_MS = 10200;
 /** Tracked UI components. */
 const UI = {
   root: document.getElementById('app'),
+  container: undefined,
   ageView: undefined,
 };
 
@@ -24,25 +25,26 @@ const Container = () => DOM.create('div', {
   display: 'flex',
   flexDirection: 'column',
   height: '100%',
-  padding: '15px',
+  padding: '15px 0px',
   margin: 0,
   backgroundColor: 'black',
   justifyContent: DOM.isMobile() ? 'flex-start' : 'center',
+  transition: '0.2s',
 });
 
 /**
- * AgeView component.
+ * TitleText component.
  *
  * @returns {HTMLElement}
  */
-const AgeView = () => DOM.create('div', {
+const TitleText = ({ text = '' } = {}) => DOM.create('div', {
   display: 'flex',
   flexDirection: 'row',
   justifyContent: 'center',
   textAlign: 'center',
   color: 'white',
   fontSize: DOM.isMobile() ? '2rem' : '3rem',
-});
+}, {}, [text]);
 
 /**
  * ImageView component.
@@ -50,28 +52,15 @@ const AgeView = () => DOM.create('div', {
  * @param {object} props - Component props. 
  * @returns {HTMLElement}
  */
-const ImageView = ({ src }) => {
+const ImageView = ({ src, maxWidth, maxHeight }) => {
   const img = DOM.create('img', {
-    maxWidth: '256px',
-    maxHeight: '256px',
+    maxWidth,
+    maxHeight,
     borderRadius: '140px',
-    margin: '0px auto 20px auto',
+    margin: '20px auto 20px auto',
     transition: '0.2s',
   }, {
     src,
-  });
-
-  img.addEventListener('click', () => {
-    // Set
-    img.style.border = 'solid 8px lightgreen';
-
-    // Reset
-    setTimeout(() => {
-      img.style.border = 'none';
-    }, BUTTON_POP_MS);
-
-    // Trigger sound
-    soundbyte.play();
   });
 
   return img;
@@ -87,8 +76,9 @@ const YoutubeEmbed = () => {
     display: 'flex',
     margin: 'auto',
     justifyContent: 'center',
-    marginTop: '30px',
+    marginTop: '10px',
     maxWidth: '100%',
+    backgroundColor: '#333',
   });
 
   container.innerHTML = `<iframe
@@ -114,15 +104,25 @@ const YoutubeEmbed = () => {
  *
  * @returns {HTMLElement}
  */
-const GitHubLink = () => DOM.create('a', {
-  color: '#555',
-  display: 'flex',
-  justifyContent: 'center',
-  margin: '10px auto 10px auto',
-}, {
-  target: '_blank',
-  href: 'https://github.com/C-D-Lewis/howoldisryan.com',
-}, ['Source available on GitHub']);
+const GitHubLink = () => {
+  const anchor = DOM.create('a', {
+    color: '#555',
+    display: 'flex',
+    justifyContent: 'center',
+    margin: '20px auto 0px auto',
+  }, {
+    target: '_blank',
+    href: 'https://github.com/C-D-Lewis/howoldisryan.com',
+  }, [
+    ImageView({
+      src: './assets/github.png',
+      maxWidth: '48px',
+      maxHeight: '48px',
+    }),
+  ]);
+
+  return anchor;
+};
 
 /**
  * Calculate the age string.
@@ -149,19 +149,44 @@ const calculateAgeString = () => {
  * Create UI components.
  */
 const setupUI = () => {
-  const container = Container();
+  UI.container = Container();
 
-  DOM.addChild(container, ImageView({ src: './assets/headshot.png' }));
+  const heroImg = ImageView({
+    src: './assets/headshot.png',
+    maxWidth: 256,
+    maxHeight: 256,
+  });
+  heroImg.addEventListener('click', () => {
+    heroImg.style.border = 'solid 8px lightgreen';
+    UI.container.style.backgroundColor = 'rgb(0, 50, 0)';
+
+    setTimeout(() => {
+      heroImg.style.border = 'none';
+      UI.container.style.backgroundColor = 'black';
+    }, BUTTON_POP_MS);
+    
+    soundbyte.play();
+  });
+
+  DOM.addChild(UI.container, heroImg);
   
-  UI.ageView = AgeView();
-  DOM.addChild(container, UI.ageView);
+  UI.ageView = TitleText();
+  DOM.addChild(UI.container, UI.ageView);
 
-  DOM.addChild(container, YoutubeEmbed());
+  const videoContainer = Container();
+  videoContainer.style.padding = 0;
+  videoContainer.style.marginTop = '50px';
 
-  DOM.addChild(container, GitHubLink());
+  const videoLabel = TitleText({ text: 'A message from friends:' });
+  videoLabel.style.fontSize = '1.4rem';
+  DOM.addChild(videoContainer, videoLabel);
+  DOM.addChild(videoContainer, YoutubeEmbed());
+  DOM.addChild(UI.container, videoContainer);
+
+  DOM.addChild(UI.container, GitHubLink());
 
   // Finally
-  DOM.addChild(UI.root, container);
+  DOM.addChild(UI.root, UI.container);
 };
 
 /**
