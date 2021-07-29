@@ -77,12 +77,37 @@ const ImageView = ({ src }) => {
   return img;
 };
 
-const Hourglass = () => DOM.create('img', {
-  maxWidth: '64px',
-  maxHeight: '64px',
-}, {
-  src: './assets/hourglass.png',
-});
+/**
+ * YouTube embed.
+ *
+ * @returns {HTMLElement}
+ */
+const YoutubeEmbed = () => {
+  const container = DOM.create('div', {
+    display: 'flex',
+    margin: 'auto',
+    justifyContent: 'center',
+    marginTop: '30px',
+    maxWidth: '100%',
+  });
+
+  container.innerHTML = `<iframe
+    width="560"
+    height="315"
+    src="https://www.youtube.com/embed/8fJlxnUgz_M"
+    title="YouTube video player"
+    frameborder="0"
+    allow="accelerometer;
+    autoplay;
+    clipboard-write;
+    encrypted-media;
+    gyroscope;
+    picture-in-picture"
+    allowfullscreen>
+  </iframe>`;
+
+  return container;
+};
 
 /**
  * Source on GitHub link.
@@ -117,9 +142,10 @@ const calculateAgeString = () => {
     minutes,
     seconds,
   } = datetimeDifference(BIRTH_DATE, now);
+  const realDays = Math.max(days - 1, 0);
   return DOM.isMobile()
-    ? `${years} years, ${months} months,<br/>${days - 1} days, ${hours} hours,<br/>${minutes} minutes, ${seconds} seconds`
-    : `${years} years, ${months} months, ${days - 1} days,<br/>${hours} hours, ${minutes} minutes, ${seconds} seconds`;
+    ? `${years} years, ${months} months,<br/>${realDays} days, ${hours} hours,<br/>${minutes} minutes, ${seconds} seconds`
+    : `${years} years, ${months} months, ${realDays} days,<br/>${hours} hours, ${minutes} minutes, ${seconds} seconds`;
 };
 
 /**
@@ -132,6 +158,8 @@ const setupUI = () => {
   
   UI.ageView = AgeView();
   DOM.addChild(container, UI.ageView);
+
+  DOM.addChild(container, YoutubeEmbed());
 
   DOM.addChild(container, GitHubLink());
 
