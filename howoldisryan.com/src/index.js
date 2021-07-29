@@ -118,10 +118,7 @@ const GitHubLink = () => DOM.create('a', {
   color: '#555',
   display: 'flex',
   justifyContent: 'center',
-  position: 'fixed',
-  bottom: '20px',
-  left: 0,
-  right: 0,
+  margin: '10px auto 10px auto',
 }, {
   target: '_blank',
   href: 'https://github.com/C-D-Lewis/howoldisryan.com',
