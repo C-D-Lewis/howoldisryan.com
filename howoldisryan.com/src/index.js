@@ -27,7 +27,7 @@ const Container = () => DOM.create('div', {
   padding: '15px',
   margin: 0,
   backgroundColor: 'black',
-  justifyContent: 'center',
+  justifyContent: DOM.isMobile() ? 'flex-start' : 'center',
 });
 
 /**

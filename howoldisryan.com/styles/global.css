@@ -5,12 +5,12 @@
 html, body {
   margin: 0;
   padding: 0;
-  height: 90vh;
+  height: 100vh;
   background-color: black;
 }
 
 #app {
-  height: 90vh;
+  height: 100vh;
 }
 
 div {
