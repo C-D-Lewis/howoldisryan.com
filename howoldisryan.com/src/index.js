@@ -176,6 +176,7 @@ const setupUI = () => {
   const videoContainer = Container();
   videoContainer.style.padding = 0;
   videoContainer.style.marginTop = '50px';
+  videoContainer.style.backgroundColor = '#0000';
 
   const videoLabel = TitleText({ text: 'A message from friends:' });
   videoLabel.style.fontSize = '1.4rem';
