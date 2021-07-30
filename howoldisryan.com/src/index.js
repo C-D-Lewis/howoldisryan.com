@@ -139,10 +139,9 @@ const calculateAgeString = () => {
     minutes,
     seconds,
   } = datetimeDifference(BIRTH_DATE, now);
-  const realDays = Math.max(days - 1, 0);
   return DOM.isMobile()
-    ? `${years} years, ${months} months,<br/>${realDays} days, ${hours + 1} hours,<br/>${minutes} minutes, ${seconds} seconds`
-    : `${years} years, ${months} months, ${realDays} days,<br/>${hours + 1} hours, ${minutes} minutes, ${seconds} seconds`;
+    ? `${years} years, ${months} months,<br/>${days} days, ${hours + 1} hours,<br/>${minutes} minutes, ${seconds} seconds`
+    : `${years} years, ${months} months, ${days} days,<br/>${hours + 1} hours, ${minutes} minutes, ${seconds} seconds`;
 };
 
 /**
