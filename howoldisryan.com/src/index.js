@@ -171,12 +171,12 @@ const setupUI = () => {
       YoutubeEmbed(),
     ]);
 
-    container.addChildren([
-      portraitImg,
-      UI.ageView,
-      videoContainer,
-      GitHubLink(),
-    ]);
+  container.addChildren([
+    portraitImg,
+    UI.ageView,
+    videoContainer,
+    GitHubLink(),
+  ]);
 
   // Finally
   fabricate.app(container);
