@@ -9,8 +9,6 @@ const BUTTON_POP_MS = 10200;
 
 /** Tracked UI components. */
 const UI = {
-  root: document.getElementById('app'),
-  container: undefined,
   ageView: undefined,
 };
 
@@ -21,30 +19,31 @@ const soundbyte = new Audio('./assets/operator.mp3');
  *
  * @returns {HTMLElement}
  */
-const Container = () => DOM.create('div', {
-  display: 'flex',
-  flexDirection: 'column',
-  height: '100%',
-  padding: '15px 0px',
-  margin: 0,
-  backgroundColor: 'black',
-  justifyContent: DOM.isMobile() ? 'flex-start' : 'center',
-  transition: '0.2s',
-});
+const Container = () => fabricate('div')
+  .asFlex('column')
+  .addStyles({
+    height: '100%',
+    padding: '15px 0px',
+    margin: 0,
+    backgroundColor: 'black',
+    justifyContent: fabricate.isMobile() ? 'flex-start' : 'center',
+    transition: '0.2s',
+  });
 
 /**
  * TitleText component.
  *
  * @returns {HTMLElement}
  */
-const TitleText = ({ text = '' } = {}) => DOM.create('div', {
-  display: 'flex',
-  flexDirection: 'row',
-  justifyContent: 'center',
-  textAlign: 'center',
-  color: 'white',
-  fontSize: DOM.isMobile() ? '2rem' : '3rem',
-}, {}, [text]);
+const TitleText = () => fabricate('div')
+  .addStyles({
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'center',
+    textAlign: 'center',
+    color: 'white',
+    fontSize: fabricate.isMobile() ? '2rem' : '3rem',
+  });
 
 /**
  * ImageView component.
@@ -52,77 +51,66 @@ const TitleText = ({ text = '' } = {}) => DOM.create('div', {
  * @param {object} props - Component props. 
  * @returns {HTMLElement}
  */
-const ImageView = ({ src, maxWidth, maxHeight }) => {
-  const img = DOM.create('img', {
-    maxWidth,
-    maxHeight,
+const ImageView = () => fabricate('img')
+  .addStyles({
     borderRadius: '140px',
     margin: '20px auto 20px auto',
     transition: '0.2s',
-  }, {
-    src,
   });
-
-  return img;
-};
 
 /**
  * YouTube embed.
  *
  * @returns {HTMLElement}
  */
-const YoutubeEmbed = () => {
-  const container = DOM.create('div', {
-    display: 'flex',
+const YoutubeEmbed = () => fabricate('div')
+  .asFlex('row')
+  .addStyles({
     margin: 'auto',
     justifyContent: 'center',
     marginTop: '10px',
     maxWidth: '100%',
     backgroundColor: '#333',
-  });
-
-  container.innerHTML = `<iframe
-    width="560"
-    height="315"
-    src="https://www.youtube.com/embed/8fJlxnUgz_M"
-    title="YouTube video player"
-    frameborder="0"
-    allow="accelerometer;
-    autoplay;
-    clipboard-write;
-    encrypted-media;
-    gyroscope;
-    picture-in-picture"
-    allowfullscreen>
-  </iframe>`;
-
-  return container;
-};
+  })
+  .setHtml(`<iframe
+      width="560"
+      height="315"
+      src="https://www.youtube.com/embed/8fJlxnUgz_M"
+      title="YouTube video player"
+      frameborder="0"
+      allow="accelerometer;
+      autoplay;
+      clipboard-write;
+      encrypted-media;
+      gyroscope;
+      picture-in-picture"
+      allowfullscreen>
+    </iframe>`);
 
 /**
  * Source on GitHub link.
  *
  * @returns {HTMLElement}
  */
-const GitHubLink = () => {
-  const anchor = DOM.create('a', {
+const GitHubLink = () => fabricate('a')
+  .asFlex('row')
+  .addStyles({
     color: '#555',
-    display: 'flex',
     justifyContent: 'center',
     margin: '20px auto 0px auto',
-  }, {
+  })
+  .addAttributes({
     target: '_blank',
     href: 'https://github.com/C-D-Lewis/howoldisryan.com',
-  }, [
-    ImageView({
-      src: './assets/github.png',
-      maxWidth: '48px',
-      maxHeight: '48px',
-    }),
+  })
+  .addChildren([
+    ImageView()
+      .addAttributes({ src: './assets/github.png' })
+      .addStyles({
+        maxWidth: '48px',
+        maxHeight: '48px',
+      }),
   ]);
-
-  return anchor;
-};
 
 /**
  * Calculate the age string.
@@ -139,7 +127,7 @@ const calculateAgeString = () => {
     minutes,
     seconds,
   } = datetimeDifference(BIRTH_DATE, now);
-  return DOM.isMobile()
+  return fabricate.isMobile()
     ? `${years} years, ${months} months,<br/>${days} days, ${hours + 1} hours,<br/>${minutes} minutes, ${seconds} seconds`
     : `${years} years, ${months} months, ${days} days,<br/>${hours + 1} hours, ${minutes} minutes, ${seconds} seconds`;
 };
@@ -148,52 +136,57 @@ const calculateAgeString = () => {
  * Create UI components.
  */
 const setupUI = () => {
-  UI.container = Container();
+  const container = Container();
 
-  const heroImg = ImageView({
-    src: './assets/headshot.png',
-    maxWidth: 256,
-    maxHeight: 256,
-  });
-  heroImg.addEventListener('click', () => {
-    heroImg.style.border = 'solid 8px lightgreen';
-    UI.container.style.backgroundColor = 'rgb(0, 50, 0)';
+  const portraitImg = ImageView()
+    .addStyles({
+      maxWidth: 256,
+      maxHeight: 256,
+    })
+    .addAttributes({ src: './assets/headshot.png' })
+    .onClick((el) => {
+      el.addStyles({ border: 'solid 8px lightgreen' });
+      container.addStyles({ backgroundColor: 'rgb(0, 50, 0)' });
 
-    setTimeout(() => {
-      heroImg.style.border = 'none';
-      UI.container.style.backgroundColor = 'black';
-    }, BUTTON_POP_MS);
-    
-    soundbyte.play();
-  });
+      setTimeout(() => {
+        el.addStyles({ border: 'none' });
+        container.addStyles({ backgroundColor: 'black' });
+      }, BUTTON_POP_MS);
 
-  DOM.addChild(UI.container, heroImg);
-  
+      soundbyte.play();
+    });
+
   UI.ageView = TitleText();
-  DOM.addChild(UI.container, UI.ageView);
+  
+  const videoContainer = Container()
+    .addStyles({
+      padding: 0,
+      marginTop: '50px',
+      backgroundColor: '#0000',
+    })
+    .addChildren([
+      TitleText()
+        .addStyles({ fontSize: '1.4rem' })
+        .setText('A message from friends:'),
+      YoutubeEmbed(),
+    ]);
 
-  const videoContainer = Container();
-  videoContainer.style.padding = 0;
-  videoContainer.style.marginTop = '50px';
-  videoContainer.style.backgroundColor = '#0000';
-
-  const videoLabel = TitleText({ text: 'A message from friends:' });
-  videoLabel.style.fontSize = '1.4rem';
-  DOM.addChild(videoContainer, videoLabel);
-  DOM.addChild(videoContainer, YoutubeEmbed());
-  DOM.addChild(UI.container, videoContainer);
-
-  DOM.addChild(UI.container, GitHubLink());
+    container.addChildren([
+      portraitImg,
+      UI.ageView,
+      videoContainer,
+      GitHubLink(),
+    ]);
 
   // Finally
-  DOM.addChild(UI.root, UI.container);
+  fabricate.app(container);
 };
 
 /**
  * When the UI should be updated.
  */
 const updateUI = () => {
-  DOM.setHtml(UI.ageView, calculateAgeString());
+  UI.ageView.setHtml(calculateAgeString());
 };
 
 /**
