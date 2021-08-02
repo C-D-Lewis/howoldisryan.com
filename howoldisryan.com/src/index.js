@@ -36,9 +36,8 @@ const Container = () => fabricate('div')
  * @returns {HTMLElement}
  */
 const TitleText = () => fabricate('div')
+  .asFlex('row')
   .addStyles({
-    display: 'flex',
-    flexDirection: 'row',
     justifyContent: 'center',
     textAlign: 'center',
     color: 'white',
