@@ -5,69 +5,74 @@ const INTERVAL_MS = 1000;
 /** Original birth date */
 const BIRTH_DATE = new Date('1991-07-29');
 /** Time button stays pressed */
-const BUTTON_POP_MS = 10200;
-
-/** Tracked UI components. */
-const UI = {
-  ageView: undefined,
-};
+const SOUND_TIMEOUT_MS = 10200;
 
 const soundbyte = new Audio('./assets/operator.mp3');
 
 /**
- * Container component.
+ * Calculate the age string.
+ *
+ * @returns {string} Age string.
+ */
+const buildAgeString = () => {
+  const now = new Date();
+  const {
+    years,
+    months,
+    days,
+    hours,
+    minutes,
+    seconds,
+  } = datetimeDifference(BIRTH_DATE, now);
+  return fabricate.isNarrow()
+    ? `${years} years, ${months} months,<br/>${days} days, ${hours + 1} hours,<br/>${minutes} minutes, ${seconds} seconds`
+    : `${years} years, ${months} months, ${days} days,<br/>${hours + 1} hours, ${minutes} minutes, ${seconds} seconds`;
+};
+
+/**
+ * PageContainer component.
  *
  * @returns {HTMLElement}
  */
-const Container = () => fabricate('div')
-  .asFlex('column')
-  .addStyles({
+const PageContainer = () => fabricate('Column')
+  .setStyles({
     height: '100%',
     padding: '15px 0px',
     margin: 0,
     backgroundColor: 'black',
-    justifyContent: fabricate.isMobile() ? 'flex-start' : 'center',
+    justifyContent: fabricate.isNarrow() ? 'flex-start' : 'center',
     transition: '0.2s',
-  });
+  })
+  .onUpdate((el, { isPlaying }) => {
+    el.setStyles({ backgroundColor: isPlaying ? 'rgb(0, 50, 0)' : 'black' });
+  }, ['isPlaying']);
 
 /**
- * TitleText component.
+ * AgeText component.
  *
  * @returns {HTMLElement}
  */
-const TitleText = () => fabricate('div')
-  .asFlex('row')
-  .addStyles({
-    justifyContent: 'center',
+const AgeText = () => fabricate('Text')
+  .setStyles({
+    margin: 'auto',
     textAlign: 'center',
     color: 'white',
-    fontSize: fabricate.isMobile() ? '2rem' : '3rem',
-  });
-
-/**
- * ImageView component.
- * 
- * @param {object} props - Component props. 
- * @returns {HTMLElement}
- */
-const ImageView = () => fabricate('img')
-  .addStyles({
-    borderRadius: '140px',
-    margin: '20px auto 20px auto',
-    transition: '0.2s',
-  });
+    fontSize: fabricate.isNarrow() ? '2rem' : '3rem',
+  })
+  .onUpdate((el, { ageString }) => {
+    // Allow <br/>
+    el.setHtml(ageString);
+  }, ['fabricate:init', 'ageString']);
 
 /**
  * YouTube embed.
  *
  * @returns {HTMLElement}
  */
-const YoutubeEmbed = () => fabricate('div')
-  .asFlex('row')
-  .addStyles({
-    margin: 'auto',
+const YoutubeEmbed = () => fabricate('Row')
+  .setStyles({
     justifyContent: 'center',
-    marginTop: '10px',
+    margin: '15px auto',
     maxWidth: '100%',
     backgroundColor: '#333',
   })
@@ -92,110 +97,85 @@ const YoutubeEmbed = () => fabricate('div')
  * @returns {HTMLElement}
  */
 const GitHubLink = () => fabricate('a')
-  .asFlex('row')
-  .addStyles({
-    color: '#555',
-    justifyContent: 'center',
-    margin: '20px auto 0px auto',
-  })
-  .addAttributes({
-    target: '_blank',
+  .setStyles({ margin: '60px auto 0px auto' })
+  .setAttributes({
     href: 'https://github.com/C-D-Lewis/howoldisryan.com',
+    target: '_blank',
   })
-  .addChildren([
-    ImageView()
-      .addAttributes({ src: './assets/github.png' })
-      .addStyles({
-        maxWidth: '48px',
-        maxHeight: '48px',
-      }),
+  .setChildren([
+    fabricate('Image', { src: './assets/github.png' })
+      .setStyles({ width: '48px', height: '48px' }),
   ]);
 
 /**
- * Calculate the age string.
+ * Interactive portait image component.
  *
- * @returns {string}
+ * @returns {HTMLElement}
  */
-const calculateAgeString = () => {
-  const now = new Date();
-  const {
-    years,
-    months,
-    days,
-    hours,
-    minutes,
-    seconds,
-  } = datetimeDifference(BIRTH_DATE, now);
-  return fabricate.isMobile()
-    ? `${years} years, ${months} months,<br/>${days} days, ${hours + 1} hours,<br/>${minutes} minutes, ${seconds} seconds`
-    : `${years} years, ${months} months, ${days} days,<br/>${hours + 1} hours, ${minutes} minutes, ${seconds} seconds`;
-};
+const PortraitImage = () => fabricate('Image', { src: './assets/headshot.png' })
+  .setStyles({
+    width: '256px',
+    height: '256px',
+    borderRadius: '140px',
+    margin: '20px auto 20px auto',
+    transition: '0.2s',
+  })
+  .onUpdate((el, { isPlaying }) => {
+    el.setStyles({ border: isPlaying ? 'solid 8px lightgreen' : 'none' });
+  }, ['isPlaying'])
+  .onClick((el, { isPlaying }) => {
+    if (isPlaying) return;
+
+    fabricate.update({ isPlaying: true });
+    setTimeout(() => fabricate.update({ isPlaying: false }), SOUND_TIMEOUT_MS);
+
+    soundbyte.play();
+  });
 
 /**
- * Create UI components.
+ * Video view with message.
+ *
+ * @returns {HTMLElement}
  */
-const setupUI = () => {
-  const container = Container();
-
-  const portraitImg = ImageView()
-    .addStyles({
-      maxWidth: 256,
-      maxHeight: 256,
-    })
-    .addAttributes({ src: './assets/headshot.png' })
-    .onClick((el) => {
-      el.addStyles({ border: 'solid 8px lightgreen' });
-      container.addStyles({ backgroundColor: 'rgb(0, 50, 0)' });
-
-      setTimeout(() => {
-        el.addStyles({ border: 'none' });
-        container.addStyles({ backgroundColor: 'black' });
-      }, BUTTON_POP_MS);
-
-      soundbyte.play();
-    });
-
-  UI.ageView = TitleText();
-  
-  const videoContainer = Container()
-    .addStyles({
-      padding: 0,
-      marginTop: '50px',
-      backgroundColor: '#0000',
-    })
-    .addChildren([
-      TitleText()
-        .addStyles({ fontSize: '1.4rem' })
-        .setText('A message from friends:'),
-      YoutubeEmbed(),
-    ]);
-
-  container.addChildren([
-    portraitImg,
-    UI.ageView,
-    videoContainer,
-    GitHubLink(),
+const VideoView = () => fabricate('Column')
+  .setStyles({
+    padding: 0,
+    marginTop: '50px',
+    backgroundColor: '#0000',
+  })
+  .setChildren([
+    fabricate('Text')
+      .setStyles({
+        fontSize: '1.4rem',
+        color: 'white',
+        margin: '5px auto',
+      })
+      .setText('A message from friends:'),
+    YoutubeEmbed(),
   ]);
 
-  // Finally
-  fabricate.app(container);
-};
-
 /**
- * When the UI should be updated.
+ * Main App component.
+ *
+ * @returns {HTMLElement}
  */
-const updateUI = () => {
-  UI.ageView.setHtml(calculateAgeString());
+const App = () => PageContainer()
+  .setChildren([
+    PortraitImage(),
+    AgeText(),
+    VideoView(),
+    GitHubLink(),
+  ])
+  .onCreate(() => {
+    setInterval(
+      () => fabricate.update({ ageString: buildAgeString() }),
+      INTERVAL_MS,
+    );
+  });
+
+const initialState = {
+  ageString: buildAgeString(),
+  isPlaying: false,
 };
 
-/**
- * The main function.
- */
-const main = () => {
-  setupUI();
-
-  setInterval(updateUI, INTERVAL_MS);
-  updateUI();
-};
-
-main();
+fabricate.app(App(), initialState);
