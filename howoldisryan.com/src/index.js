@@ -32,7 +32,7 @@ const buildAgeString = () => {
 /**
  * PageContainer component.
  *
- * @returns {HTMLElement}
+ * @returns {HTMLElement} Fabricate component.
  */
 const PageContainer = () => fabricate('Column')
   .setStyles({
@@ -50,7 +50,7 @@ const PageContainer = () => fabricate('Column')
 /**
  * AgeText component.
  *
- * @returns {HTMLElement}
+ * @returns {HTMLElement} Fabricate component.
  */
 const AgeText = () => fabricate('Text')
   .setStyles({
@@ -67,7 +67,7 @@ const AgeText = () => fabricate('Text')
 /**
  * YouTube embed.
  *
- * @returns {HTMLElement}
+ * @returns {HTMLElement} Fabricate component.
  */
 const YoutubeEmbed = () => fabricate('Row')
   .setStyles({
@@ -92,25 +92,9 @@ const YoutubeEmbed = () => fabricate('Row')
     </iframe>`);
 
 /**
- * Source on GitHub link.
- *
- * @returns {HTMLElement}
- */
-const GitHubLink = () => fabricate('a')
-  .setStyles({ margin: '60px auto 0px auto' })
-  .setAttributes({
-    href: 'https://github.com/C-D-Lewis/howoldisryan.com',
-    target: '_blank',
-  })
-  .setChildren([
-    fabricate('Image', { src: './assets/github.png' })
-      .setStyles({ width: '48px', height: '48px' }),
-  ]);
-
-/**
  * Interactive portait image component.
  *
- * @returns {HTMLElement}
+ * @returns {HTMLElement} Fabricate component.
  */
 const PortraitImage = () => fabricate('Image', { src: './assets/headshot.png' })
   .setStyles({
@@ -135,7 +119,7 @@ const PortraitImage = () => fabricate('Image', { src: './assets/headshot.png' })
 /**
  * Video view with message.
  *
- * @returns {HTMLElement}
+ * @returns {HTMLElement} Fabricate component.
  */
 const VideoView = () => fabricate('Column')
   .setStyles({
@@ -157,14 +141,27 @@ const VideoView = () => fabricate('Column')
 /**
  * Main App component.
  *
- * @returns {HTMLElement}
+ * @returns {HTMLElement} Fabricate component.
  */
 const App = () => PageContainer()
   .setChildren([
     PortraitImage(),
     AgeText(),
     VideoView(),
-    GitHubLink(),
+    fabricate('Row')
+      .setStyles({ justifyContent: 'center', marginTop: '30px' })
+      .setChildren([
+        fabricate('img')
+          .setAttributes({ src: './assets/github.png' })
+          .setStyles({
+            width: '32px',
+            height: '32px',
+            cursor: 'pointer',
+          })
+          .onClick(() => window.open('https://github.com/C-D-Lewis/howoldisryan.com', '_blank')),
+        fabricate('FabricateAttribution')
+          .setStyles({ marginLeft: '15px' }),
+      ]),
   ])
   .onCreate(() => {
     setInterval(

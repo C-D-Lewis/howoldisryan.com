@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "build": "browserify src/index.js -o bundle.js"
+    "build": "browserify src/index.js -o bundle.js",
+    "start": "npm run build && http-server"
   },
   "keywords": [],
   "author": "",
@@ -13,28 +14,19 @@
     "datetime-difference": "^1.0.2"
   },
   "devDependencies": {
+    "@chris-lewis/eslint-config": "^1.0.3",
     "browserify": "^17.0.0",
     "eslint": "^8.23.1",
     "eslint-config-airbnb-base": "^15.0.0",
-    "eslint-plugin-import": "^2.26.0"
+    "eslint-plugin-import": "^2.26.0",
+    "http-server": "^14.1.1"
   },
   "eslintConfig": {
-    "extends": "eslint-config-airbnb-base",
+    "extends": "@chris-lewis/eslint-config",
     "env": {
       "browser": true
     },
-    "rules": {
-      "no-multi-spaces": 0,
-      "global-require": 0,
-      "import/no-dynamic-require": 0,
-      "no-await-in-loop": 0,
-      "no-console": 0,
-      "no-alert": 0,
-      "no-param-reassign": [
-        "error",
-        { "props": false }
-      ]
-    },
+    "rules": {},
     "globals": {
       "fabricate": "readonly"
     }
