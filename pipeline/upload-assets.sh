@@ -11,6 +11,9 @@ if [ ! "$(cat index.html | grep COMMIT)" ]; then
   exit 1
 fi
 
+# Do a build
+npm run build
+
 # Update version to fix cached script issues
 sed -i.bak "s/COMMIT/$COMMIT/g" index.html
 
