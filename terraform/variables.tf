@@ -28,12 +28,6 @@ variable "domain_name" {
   default     = "howoldisryan.com"
 }
 
-variable "alt_domain_name" {
-  type        = string
-  description = "Alternate CNAME domain name, if any"
-  default     = "www.howoldisryan.com"
-}
-
 variable "certificate_arn" {
   type        = string
   description = "Certificate ARN in ACM"

@@ -5,7 +5,6 @@ module "main" {
   vpc_id          = var.vpc_id
   zone_id         = var.zone_id
   domain_name     = var.domain_name
-  alt_domain_name = var.alt_domain_name
   certificate_arn = var.certificate_arn
 }
 
