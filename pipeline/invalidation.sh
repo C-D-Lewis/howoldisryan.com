@@ -3,7 +3,7 @@
 set -eu
 
 # Order dependent
-SITE_URL=www.howoldisryan.com
+SITE_URL=howoldisryan.com
 
 # Get CloudFront distribution ID
 CF_DIST_ID=$(aws cloudfront list-distributions | jq -r ".DistributionList.Items[] | select(.Aliases.Items[0] == \"$SITE_URL\") | .Id")
