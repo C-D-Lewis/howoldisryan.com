@@ -14,7 +14,7 @@ resource "aws_cloudfront_distribution" "client_distribution" {
   }
 
   default_cache_behavior {
-    viewer_protocol_policy = "https-only"
+    viewer_protocol_policy = "redirect-to-https"
     compress               = true
     allowed_methods        = ["GET", "HEAD", "OPTIONS"]
     cached_methods         = ["GET", "HEAD", "OPTIONS"]
