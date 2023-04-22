@@ -23,7 +23,7 @@ terraform {
   }
 
   backend "s3" {
-    bucket = "howoldisryan.com-tfstate"
+    bucket = "chrislewis-tfstate"
     key    = "howoldisryan"
     region = "us-east-1"
   }
