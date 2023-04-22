@@ -1,13 +1,3 @@
-module "main" {
-  source          = "./infrastructure"
-  region          = var.region
-  project_name    = var.project_name
-  vpc_id          = var.vpc_id
-  zone_id         = var.zone_id
-  domain_name     = var.domain_name
-  certificate_arn = var.certificate_arn
-}
-
 provider "aws" {
   region = var.region
 }
@@ -27,4 +17,15 @@ terraform {
     key    = "howoldisryan"
     region = "us-east-1"
   }
+}
+
+module "main" {
+  source = "github.com/c-d-lewis/terraform-s3-cloudfront-website?ref=master"
+
+  region          = "us-east-1"
+  project_name    = "howoldisryan"
+  zone_id         = "Z09638222JXENL53LJQWF"
+  domain_name     = "howoldisryan.com"
+  alt_domain_name = "www.howoldisryan.com"
+  certificate_arn = "arn:aws:acm:us-east-1:617929423658:certificate/5aa4f18e-821e-475d-b7d2-204ac661ef62"
 }
