@@ -2,7 +2,7 @@
   "name": "howoldisryan.com",
   "version": "1.0.0",
   "scripts": {
-    "build": "browserify src/index.js -o bundle.js",
+    "build": "browserify src/index.js -o dist/bundle.js",
     "start": "npm run build && http-server"
   },
   "author": "C-D-Lewis",
