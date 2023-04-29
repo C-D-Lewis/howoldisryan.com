@@ -2,3 +2,5 @@
 node_modules
 .terraform
 dist
+bundle.js
+
