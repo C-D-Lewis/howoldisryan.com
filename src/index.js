@@ -40,8 +40,11 @@ const PageContainer = () => fabricate('Column')
     padding: '15px 0px',
     margin: 0,
     backgroundColor: 'black',
-    justifyContent: fabricate.isNarrow() ? 'flex-start' : 'center',
+    justifyContent: 'center',
     transition: '0.2s',
+  })
+  .setNarrowStyles({
+    justifyContent: 'flex-start',
   })
   .onUpdate((el, { isPlaying }) => {
     el.setStyles({ backgroundColor: isPlaying ? 'rgb(0, 50, 0)' : 'black' });
@@ -57,7 +60,10 @@ const AgeText = () => fabricate('Text')
     margin: 'auto',
     textAlign: 'center',
     color: 'white',
-    fontSize: fabricate.isNarrow() ? '2rem' : '3rem',
+    fontSize: '3rem',
+  })
+  .setNarrowStyles({
+    fontSize: '2rem',
   })
   .onUpdate((el, { ageString }) => {
     // Allow <br/>
@@ -163,16 +169,16 @@ const App = () => PageContainer()
           .setStyles({ marginLeft: '15px' }),
       ]),
   ])
-  .onCreate(() => {
+  .onUpdate(() => {
     setInterval(
       () => fabricate.update({ ageString: buildAgeString() }),
       INTERVAL_MS,
     );
-  });
+  }, ['fabricate:created']);
 
 const initialState = {
   ageString: buildAgeString(),
   isPlaying: false,
 };
 
-fabricate.app(App(), initialState);
+fabricate.app(App, initialState);
