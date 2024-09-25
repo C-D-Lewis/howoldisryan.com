@@ -27,5 +27,5 @@ module "main" {
   zone_id         = "Z09638222JXENL53LJQWF"
   domain_name     = "howoldisryan.com"
   alt_domain_name = "www.howoldisryan.com"
-  certificate_arn = "arn:aws:acm:us-east-1:617929423658:certificate/5aa4f18e-821e-475d-b7d2-204ac661ef62"
+  certificate_arn = "arn:aws:acm:us-east-1:617929423658:certificate/27f5ef00-0401-4aad-9c22-4f4ea1159eea"
 }
